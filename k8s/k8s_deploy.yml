@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patsite-deployment
+  namespace: webpages
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      website: patsite  
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        website: patsite
+    spec:
+      containers:
+      - name: nginx-patsite
+        image: dochol22/patsite:0.0.1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d/
+          name: patsite-config
+          readOnly: true
+      volumes:
+      - name: patsite-config
+        configMap:
+          name: patsite-config
