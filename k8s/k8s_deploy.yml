@@ -20,7 +20,7 @@ spec:
     spec:
       containers:
       - name: nginx-patsite
-        image: dochol22/patsite:0.0.1
+        image: dochol22/patsite:0.0.2
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
