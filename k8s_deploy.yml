@@ -34,3 +34,17 @@ spec:
         configMap:
           name: patsite-config
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: patsite-service
+  namespace: webpages
+spec:
+  type: NodePort
+  selector:
+    website: patsite
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30000
+    protocol: TCP
