@@ -1,0 +1,52 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: patsite-service
+  namespace: webpages
+spec:
+  type: NodePort
+  selector:
+    website: patsite
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30000
+    protocol: TCP
+    
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: patsite-deployment
+  namespace: webpages
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      website: patsite  
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        website: patsite
+    spec:
+      containers:
+      - name: nginx-patsite
+        image: $DOCKER_IMAGE_NAME:$BUILD_NUMBER
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/nginx/conf.d/
+          name: patsite-config
+          readOnly: true
+      volumes:
+      - name: patsite-config
+        configMap:
+          name: patsite-config
