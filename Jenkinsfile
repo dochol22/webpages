@@ -12,8 +12,7 @@ pipeline {
                 script {
                     //app = docker.build(DOCKER_IMAGE_NAME)
                     //app.inside {
-                        VAR=`pwd`
-                        echo VAR
+                        echo "Hello world!"
                     //}
                 }
             }
