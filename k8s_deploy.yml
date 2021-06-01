@@ -1,3 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: patsite-service
+  namespace: webpages
+spec:
+  type: NodePort
+  selector:
+    website: patsite
+  ports:
+  - port: 80
+    targetPort: 80
+    nodePort: 30000
+    protocol: TCP
+    
+---
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -20,7 +37,7 @@ spec:
     spec:
       containers:
       - name: nginx-patsite
-        image: dochol22/patsite:0.0.2
+        image: $DOCKER_IMAGE_NAME:$BUILD_NUMBER
         imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 80
@@ -33,18 +50,3 @@ spec:
       - name: patsite-config
         configMap:
           name: patsite-config
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: patsite-service
-  namespace: webpages
-spec:
-  type: NodePort
-  selector:
-    website: patsite
-  ports:
-  - port: 80
-    targetPort: 80
-    nodePort: 30000
-    protocol: TCP
