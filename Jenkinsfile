@@ -17,18 +17,18 @@ pipeline {
                 }
             }
         }
- /*     stage('Push Docker Image') {
+      stage('Push Docker Image') {
             when {
                 branch 'master'
             }
             steps {
                 script {
-                    docker.withRegistry('https://registry.hub.docker.com', 'docker_hub_login') {
+                    docker.withRegistry('https://registry.hub.docker.com', 'dockerhub_api_key') {
                         app.push("${env.BUILD_NUMBER}")
                         app.push("latest")
                     }
                 }
             }
-        }*/
+        }
     }
 }
